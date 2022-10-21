@@ -2,7 +2,7 @@
 ###
 # Internet-Draft Markdown Template
 #
-# Rename this file from draft-todo-yourname-protocol.md to get started.
+# Rename this file from draft-marx-quic-qlog-datagram.md to get started.
 # Draft name format is "draft-<yourname>-<workgroup>-<name>.md".
 #
 # For initial setup, you only need to edit the first block of fields.
@@ -19,22 +19,21 @@
 # Change the file extension to match the format (.xml for XML, etc...)
 #
 ###
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
+title: "QUIC and HTTP/3 Datagram event definitions for qlog"
+abbrev: "qlog Datagram extension"
 category: info
 
-docname: draft-todo-yourname-protocol-latest
+docname: draft-marx-quic-qlog-datagram
 submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
 number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+area: Transport
+workgroup: QUIC
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - qlog
+ - datagram
 venue:
   group: WG
   type: Working Group
@@ -45,9 +44,9 @@ venue:
 
 author:
  -
-    fullname: Your Name Here
-    organization: Your Organization Here
-    email: your.email@example.com
+    fullname: Robin Marx
+    organization: Akamai
+    email: rmarx@akamai.com
 
 normative:
 
