@@ -9,18 +9,18 @@ number:
 date:
 consensus: true
 v: 3
-area: Transport
-workgroup: QUIC
+area: "Transport"
+workgroup: "QUIC"
 keyword:
  - qlog
  - datagram
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "QUIC"
+  type: "Working Group"
+  mail: "quic@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/quic/"
+  github: "rmarx/draft-marx-quic-qlog-datagram"
+  latest: "https://rmarx.github.io/draft-marx-quic-qlog-datagram/draft-marx-quic-qlog-datagram.html"
 
 author:
  -
