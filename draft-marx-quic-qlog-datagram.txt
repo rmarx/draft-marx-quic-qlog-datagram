@@ -1,0 +1,269 @@
+
+
+
+
+QUIC                                                             R. Marx
+Internet-Draft                                                    Akamai
+Intended status: Informational                           22 October 2022
+Expires: 25 April 2023
+
+
+          QUIC and HTTP/3 Datagram event definitions for qlog
+                  draft-marx-quic-qlog-datagram-latest
+
+Abstract
+
+   This document describes qlog data type definitions for both the QUIC
+   Datagram Frame defined in [RFC9221] and the HTTP/3 Datagram Frame
+   defined in [RFC9297].  These data types are intended for use within
+   event definitions defined in [QLOG-QUIC] and [QLOG-HTTP3].
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   The latest revision of this draft can be found at
+   https://rmarx.github.io/draft-marx-quic-qlog-datagram/draft-marx-
+   quic-qlog-datagram.html.  Status information for this document may be
+   found at https://datatracker.ietf.org/doc/draft-marx-quic-qlog-
+   datagram/.
+
+   Discussion of this document takes place on the QUIC Working Group
+   mailing list (mailto:quic@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/quic/.  Subscribe at
+   https://www.ietf.org/mailman/listinfo/quic/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/rmarx/draft-marx-quic-qlog-datagram.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 25 April 2023.
+
+Copyright Notice
+
+   Copyright (c) 2022 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction
+   2.  Conventions and Definitions
+   3.  QUIC Datagrams
+     3.1.  max_datagram_frame_size transport parameter
+     3.2.  QUICDatagramFrame Definition
+   4.  HTTP/3 Datagrams
+     4.1.  SETTINGS_H3_DATAGRAM setting
+     4.2.  HTTPDatagramFrame Definition
+   5.  Security and Privacy Considerations
+   6.  IANA Considerations
+   7.  Normative References
+   Acknowledgments
+   Author's Address
+
+1.  Introduction
+
+   This document describes qlog data type definitions for both the QUIC
+   Datagram Frame defined in [RFC9221] and the HTTP/3 Datagram Frame
+   defined in [RFC9297].  These data types are intended for use within
+   event definitions defined in [QLOG-QUIC] and [QLOG-HTTP3].
+
+   This document extends the $QuicFrame extension point defined in
+   [QLOG-QUIC] and the $HTTPFrame extension point defined in
+   [QLOG-HTTP3].  It also defines how to log a QUIC transport parameter
+   for indicating QUIC datagram support, as well as an HTTP/3 setting to
+   indicate HTTP/3 datagram support.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   The event and data structure definitions in ths document are
+   expressed in the Concise Data Definition Language [CDDL] and its
+   extensions described in [QLOG-MAIN].
+
+   The following fields from [QLOG-MAIN] are imported and used: data and
+   RawInfo.
+
+3.  QUIC Datagrams
+
+   qlog support for QUIC Datagram frames consists of two aspects:
+
+   *  support for logging the max_datagram_frame_size QUIC transport
+      parameter
+
+   *  support for logging the type, length and contents of the DATAGRAM
+      frame itself
+
+3.1.  max_datagram_frame_size transport parameter
+
+   Support for the QUIC Datagram extension defined in [RFC9221] is
+   signaled using the max_datagram_frame_size transport parameter,
+   defined in Section 3 of [RFC9221].
+
+   If utilized, this transport parameter MUST be logged as a field of
+   the transport:parameters_set event defined in [QLOG-QUIC], more
+   specifically:
+
+   TransportParametersSet = {
+       ? max_datagram_frame_size: uint64
+       * text => any
+   }
+
+             Figure 1: TransportParametersSet extended with the
+                     max_datagram_frame_size parameter
+
+3.2.  QUICDatagramFrame Definition
+
+   This section describes a qlog data type that can be used to log the
+   contents of the QUIC DATAGRAM frame defined in Section 4 of
+   [RFC9221].
+
+   The $QuicFrame extension point defined in [QLOG-QUIC] is utilized to
+   link the QUICDatagramFrame type to the existing qlog data types.
+
+   QUICDatagramFrame = {
+       frame_type: "datagram"
+       ? length: uint64
+       ? raw: RawInfo
+   }
+
+   $QuicFrame /= QUICDatagramFrame
+
+                   Figure 2: QUICDatagramFrame definition
+
+4.  HTTP/3 Datagrams
+
+   qlog support for HTTP/3 Datagram frames consists of two aspects:
+
+   *  support for logging the SETTINGS_H3_DATAGRAM HTTP/3 setting
+
+   *  support for logging the type and contents of the HTTP/3 DATAGRAM
+      frame itself
+
+4.1.  SETTINGS_H3_DATAGRAM setting
+
+   Support for the HTTP/3 Datagram extension defined in [RFC9297] is
+   signaled using the SETTINGS_H3_DATAGRAM setting, defined in
+   Section 2.1.1 of [RFC9297].
+
+   If utilized, this setting MUST be logged as a field of the
+   HTTPSetting data type defined in [QLOG-HTTP3], more specifically:
+
+   HTTP3DatagramSetting = {
+       name: "SETTINGS_H3_DATAGRAM"
+       value: 0 / 1
+   }
+
+          Figure 3: HTTPSetting instance for SETTINGS_H3_DATAGRAM
+
+4.2.  HTTPDatagramFrame Definition
+
+   This section describes a qlog data type that can be used to log the
+   contents of the HTTP/3 DATAGRAM frame defined in Section 2 of
+   [RFC9297].
+
+   The $HTTPFrame extension point defined in [QLOG-HTTP3] is utilized to
+   link the HTTPDatagramFrame type to the existing qlog data types.
+
+   HTTPDatagramFrame = {
+       frame_type: "datagram"
+       quarter_stream_id: uint64
+       ? raw: RawInfo
+   }
+
+   $HTTPFrame /= HTTPDatagramFrame
+
+                   Figure 4: HTTPDatagramFrame definition
+
+5.  Security and Privacy Considerations
+
+   The security and privacy considerations discussed in [QLOG-MAIN]
+   apply to this document as well.
+
+6.  IANA Considerations
+
+   This document has no IANA actions.
+
+7.  Normative References
+
+   [CDDL]     Birkholz, H., Vigano, C., and C. Bormann, "Concise Data
+              Definition Language (CDDL): A Notational Convention to
+              Express Concise Binary Object Representation (CBOR) and
+              JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
+              June 2019, <https://www.rfc-editor.org/rfc/rfc8610>.
+
+   [QLOG-HTTP3]
+              Marx, R., Niccolini, L., and M. Seemann, "HTTP/3 and QPACK
+              qlog event definitions", Work in Progress, Internet-Draft,
+              draft-ietf-quic-qlog-h3-events-02, 31 August 2022,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              qlog-h3-events-02>.
+
+   [QLOG-MAIN]
+              Marx, R., Niccolini, L., and M. Seemann, "Main logging
+              schema for qlog", Work in Progress, Internet-Draft, draft-
+              ietf-quic-qlog-main-schema-03, 31 August 2022,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              qlog-main-schema-03>.
+
+   [QLOG-QUIC]
+              Marx, R., Niccolini, L., and M. Seemann, "QUIC event
+              definitions for qlog", Work in Progress, Internet-Draft,
+              draft-ietf-quic-qlog-quic-events-02, 31 August 2022,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-quic-
+              qlog-quic-events-02>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC9221]  Pauly, T., Kinnear, E., and D. Schinazi, "An Unreliable
+              Datagram Extension to QUIC", RFC 9221,
+              DOI 10.17487/RFC9221, March 2022,
+              <https://www.rfc-editor.org/rfc/rfc9221>.
+
+   [RFC9297]  Schinazi, D. and L. Pardue, "HTTP Datagrams and the
+              Capsule Protocol", RFC 9297, DOI 10.17487/RFC9297, August
+              2022, <https://www.rfc-editor.org/rfc/rfc9297>.
+
+Acknowledgments
+
+   TODO acknowledge.
+
+Author's Address
+
+   Robin Marx
+   Akamai
+   Email: rmarx@akamai.com
