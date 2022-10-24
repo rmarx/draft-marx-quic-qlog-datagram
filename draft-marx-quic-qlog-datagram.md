@@ -130,7 +130,7 @@ type defined in {{QLOG-HTTP3}}, more specifically:
 ~~~ cddl
 HTTP3DatagramSetting = {
     name: "SETTINGS_H3_DATAGRAM"
-    value: 0 / 1
+    value: uint16
 }
 ~~~
 {: #http3datagramsetting-example title="HTTPSetting instance for SETTINGS_H3_DATAGRAM"}
