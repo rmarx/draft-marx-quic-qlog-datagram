@@ -4,8 +4,8 @@
 
 QUIC                                                             R. Marx
 Internet-Draft                                                    Akamai
-Intended status: Informational                           22 October 2022
-Expires: 25 April 2023
+Intended status: Informational                           24 October 2022
+Expires: 27 April 2023
 
 
           QUIC and HTTP/3 Datagram event definitions for qlog
@@ -51,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 April 2023.
+   This Internet-Draft will expire on 27 April 2023.
 
 Copyright Notice
 
@@ -178,7 +178,7 @@ Table of Contents
 
    HTTP3DatagramSetting = {
        name: "SETTINGS_H3_DATAGRAM"
-       value: 0 / 1
+       value: uint16
    }
 
           Figure 3: HTTPSetting instance for SETTINGS_H3_DATAGRAM
